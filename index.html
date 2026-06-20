@@ -1,64 +1,327 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MovieLove</title>
-<style>
-body{margin:0;font-family:Arial;background:#f4f6f8;color:#222}
-header,h2{background:#168dd1;color:white;text-align:center;padding:22px;margin:0}
-.search{text-align:center;background:white;padding:20px}
-input{width:80%;padding:13px;border:1px solid #ccc;border-radius:20px}
-button{margin-top:10px;padding:10px 18px;background:#168dd1;color:white;border:0;border-radius:6px}
-.movies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;padding:20px}
-.card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #bbb}
-.poster{height:200px;background:#ddd;display:flex;align-items:center;justify-content:center}
-.info{padding:14px}
-a{background:#e53935;color:white;padding:9px;text-decoration:none;border-radius:5px;display:inline-block}
-footer{background:#222;color:white;text-align:center;padding:18px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieLove</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    body.dark {
+      background: #121212;
+      color: #f5f5f5;
+    }
+
+    header {
+      background: #168dd1;
+      color: white;
+      padding: 18px 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+    }
+
+    .menu-btn {
+      position: absolute;
+      right: 15px;
+      top: 14px;
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 12px;
+      width: 190px;
+      background: white;
+      color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      z-index: 10;
+      text-align: left;
+    }
+
+    .menu.show { display: block; }
+
+    .menu button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: white;
+      text-align: left;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      background: #eaf5fc;
+    }
+
+    .search {
+      text-align: center;
+      background: white;
+      padding: 20px 12px;
+    }
+
+    body.dark .search,
+    body.dark .card,
+    body.dark .menu,
+    body.dark .menu button {
+      background: #222;
+      color: white;
+    }
+
+    input {
+      width: 82%;
+      max-width: 420px;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 24px;
+      font-size: 16px;
+    }
+
+    .search button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #168dd1;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    h2 {
+      margin: 22px 16px 12px;
+    }
+
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 0 16px 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .poster {
+      height: 190px;
+      background: linear-gradient(135deg, #168dd1, #7b2cbf);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .info {
+      padding: 13px;
+    }
+
+    .info h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .info p {
+      margin: 0 0 12px;
+      color: #666;
+      font-size: 13px;
+    }
+
+    body.dark .info p { color: #bbb; }
+
+    .watch-btn {
+      display: block;
+      text-align: center;
+      padding: 9px;
+      background: #e53935;
+      color: white;
+      border-radius: 7px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .load-more {
+      display: block;
+      margin: 0 auto 25px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 22px;
+      background: #168dd1;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #222;
+      color: white;
+      font-size: 13px;
+    }
+  </style>
 </head>
+
 <body>
-<header>
-<h1>MovieLove</h1>
-<p>Movie news, reviews and official trailers</p>
-</header>
 
-<div class="search">
-<input placeholder="Search movies...">
-<br><button>Search Movie</button>
-</div>
+  <header>
+    <h1>MovieLove</h1>
+    <p>Movie news, reviews and official trailers</p>
 
-<h2>Latest Movies</h2>
+    <button class="menu-btn" onclick="toggleMenu()">⋮</button>
 
-<div class="movies">
-<div class="card">
-<div class="poster">Movie Poster</div>
-<div class="info">
-<h3>Movie Name 1</h3>
-<p>Action | Tamil | 2026</p>
-<a href="https://www.youtube.com/" target="_blank">Official Trailer</a>
-</div>
-</div>
+    <div class="menu" id="menu">
+      <button onclick="showMessage('Home selected')">🏠 Home</button>
+      <button onclick="showMessage('Latest movies selected')">🎬 Latest Movies</button>
+      <button onclick="showMessage('Genres selected')">🎭 Genres</button>
+      <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+      <button onclick="showMessage('MovieLove is a movie information website')">ℹ️ About</button>
+    </div>
+  </header>
 
-<div class="card">
-<div class="poster">Movie Poster</div>
-<div class="info">
-<h3>Movie Name 2</h3>
-<p>Thriller | Tamil | 2026</p>
-<a href="https://www.youtube.com/" target="_blank">Official Trailer</a>
-</div>
-</div>
+  <section class="search">
+    <input id="searchInput" placeholder="Search movies...">
+    <br>
+    <button onclick="searchMovie()">Search Movie</button>
+  </section>
 
-<div class="card">
-<div class="poster">Movie Poster</div>
-<div class="info">
-<h3>Movie Name 3</h3>
-<p>Drama | Tamil | 2026</p>
-<a href="https://www.youtube.com/" target="_blank">Official Trailer</a>
-</div>
-</div>
-</div>
+  <h2 id="sectionTitle">Latest Movies</h2>
 
-<footer>© 2026 MovieLove</footer>
+  <section class="movies" id="movieList">
+
+    <div class="card">
+      <div class="poster">Action Movie</div>
+      <div class="info">
+        <h3>Sky Force</h3>
+        <p>Action • Drama • 2025</p>
+        <a class="watch-btn" href="https://www.youtube.com/" target="_blank">Watch Trailer</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="poster">Romantic Movie</div>
+      <div class="info">
+        <h3>Love Forever</h3>
+        <p>Romance • Drama • 2025</p>
+        <a class="watch-btn" href="https://www.youtube.com/" target="_blank">Watch Trailer</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="poster">Thriller Movie</div>
+      <div class="info">
+        <h3>Dark Secret</h3>
+        <p>Thriller • Mystery • 2025</p>
+        <a class="watch-btn" href="https://www.youtube.com/" target="_blank">Watch Trailer</a>
+      </div>
+    </div>
+
+  </section>
+
+  <button class="load-more" onclick="loadMore()">Load More Movies</button>
+
+  <footer>
+    © 2026 MovieLove | Built by Robin
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("show");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      document.getElementById("menu").classList.remove("show");
+    }
+
+    function showMessage(message) {
+      alert(message);
+      document.getElementById("menu").classList.remove("show");
+    }
+
+    function searchMovie() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".card");
+      let found = false;
+
+      cards.forEach(card => {
+        const title = card.querySelector("h3").innerText.toLowerCase();
+
+        if (title.includes(input)) {
+          card.style.display = "block";
+          found = true;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      document.getElementById("sectionTitle").innerText =
+        input ? "Search Results" : "Latest Movies";
+
+      if (!found && input) {
+        alert("No movie found. Try Sky Force, Love Forever, or Dark Secret.");
+      }
+    }
+
+    function loadMore() {
+      const movieList = document.getElementById("movieList");
+
+      movieList.innerHTML += `
+        <div class="card">
+          <div class="poster">Comedy Movie</div>
+          <div class="info">
+            <h3>Funny Days</h3>
+            <p>Comedy • Family • 2025</p>
+            <a class="watch-btn" href="https://www.youtube.com/" target="_blank">Watch Trailer</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="poster">Sci-Fi Movie</div>
+          <div class="info">
+            <h3>Future World</h3>
+            <p>Sci-Fi • Adventure • 2025</p>
+            <a class="watch-btn" href="https://www.youtube.com/" target="_blank">Watch Trailer</a>
+          </div>
+        </div>
+      `;
+
+      alert("More movies added!");
+    }
+  </script>
+
 </body>
 </html>
